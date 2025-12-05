@@ -214,3 +214,70 @@ ul {
     align-items: center;
     min-width: 100px;            /* forces wider buttons so they separate better */
 }
+
+/* ---------- IMPORT / EXPORT BUTTONS ---------- */
+
+.import-export-row {
+    display: flex;
+    gap: 12px;
+    margin-top: 10px;
+    flex-wrap: wrap; /* zorgt dat ze mooi afbreken op kleine schermen */
+}
+
+.purple-btn {
+    background-color: #8b00c9;
+    color: white;
+    border: none;
+    padding: 10px 16px;
+    border-radius: 6px;
+    font-size: 15px;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.purple-btn:hover {
+    background-color: #a83de0;
+}
+
+.purple-btn:active {
+    transform: scale(0.96);
+}
+
+.danger-btn {
+    background-color: #d62828;
+    color: white;
+    border: none;
+    padding: 10px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+.danger-btn:hover {
+    background-color: #e63946;
+}
+
+.action-btn {
+    display: inline-block;
+    min-width: 150px;     /* zelfde breedte */
+    padding: 10px 16px;
+    text-align: center;
+    border-radius: 6px;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.action-btn.purple {
+    background-color: #8000d7;
+}
+.action-btn.purple:hover {
+    background-color: #9b28ff;
+}
+
+.action-btn.red {
+    background-color: #d62828;
+}
+.action-btn.red:hover {
+    background-color: #e63946;
+}

@@ -248,6 +248,7 @@ let currentFolderIndex = null;
 let currentListIndex = null;
 
 function initListPage() {
+
     const params = new URLSearchParams(window.location.search);
     currentFolderIndex = parseInt(params.get("folder"), 10);
     currentListIndex = parseInt(params.get("list"), 10);
@@ -265,10 +266,11 @@ function initListPage() {
     const folder = appData.folders[currentFolderIndex];
     const list = folder.lists[currentListIndex];
 
-    // ---- ELEMENTEN OPHALEN ----
+    // DOM ELEMENTEN
     const titleEl = document.getElementById("listTitle");
     const infoEl = document.getElementById("listInfo");
     const wordsViewEl = document.getElementById("wordsView");
+
     const editSectionEl = document.getElementById("editSection");
     const editBtn = document.getElementById("editListBtn");
     const saveEditBtn = document.getElementById("saveEditBtn");
@@ -276,37 +278,27 @@ function initListPage() {
     const editRowsContainer = document.getElementById("editRows");
 
     const quizModeSelect = document.getElementById("quizMode");
-    const quizDirectionSelect = document.getElementById("quizDirection");  // <-- CORRECT ID
+    const quizDirectionSelect = document.getElementById("quizDirection");
     const startQuizBtn = document.getElementById("startQuizBtn");
 
-    // Wordt niet gebruikt in deze pagina maar laten we staan:
-    const questionEl = document.getElementById("question");
-    const answerInput = document.getElementById("answerInput");
-    const multipleChoicesEl = document.getElementById("multipleChoices");
-    const feedbackEl = document.getElementById("feedback");
-
-    // ---- TITEL & INFO ----
     titleEl.textContent = list.name;
     infoEl.textContent = `Talen: ${list.fromLang} ↔ ${list.toLang}`;
 
-    // Richtingen dropdown dynamisch vullen op basis van talen
+    // Richting dynamisch instellen
     quizDirectionSelect.innerHTML = `
         <option value="forward">${list.fromLang} → ${list.toLang}</option>
         <option value="reverse">${list.toLang} → ${list.fromLang}</option>
         <option value="both">Beide kanten</option>
     `;
 
-    // ❗ BELANGRIJK: dropdown NIET meer overschrijven met JS
-    // Dus GEEN quizDirectionSelect.innerHTML = "";
-    // Hierdoor werkt "Beide kanten" correct uit jouw HTML.
-
-    // ---- WEERGAVE WOORDEN ----
+    // ---------------- WEERGAVE ----------------
     function renderWordsView() {
         wordsViewEl.innerHTML = "";
         if (list.words.length === 0) {
             wordsViewEl.textContent = "Nog geen woorden in deze lijst.";
             return;
         }
+
         const ul = document.createElement("ul");
         list.words.forEach(w => {
             const li = document.createElement("li");
@@ -316,7 +308,10 @@ function initListPage() {
         wordsViewEl.appendChild(ul);
     }
 
-    // ---- BEWERKMODUS ----
+    renderWordsView();
+
+
+    // ---------------- BEWERKEN ----------------
     function addEditRow(frontValue = "", backValue = "") {
         const row = document.createElement("div");
         row.className = "word-row";
@@ -353,6 +348,7 @@ function initListPage() {
     function saveEdits() {
         const rows = Array.from(editRowsContainer.querySelectorAll(".word-row"));
         const newWords = [];
+
         rows.forEach(row => {
             const inputs = row.querySelectorAll("input");
             const front = inputs[0].value.trim();
@@ -361,6 +357,7 @@ function initListPage() {
                 newWords.push({ front, back });
             }
         });
+
         list.words = newWords;
         saveData();
         renderWordsView();
@@ -368,17 +365,16 @@ function initListPage() {
     }
 
     editSectionEl.style.display = "none";
-    renderWordsView();
-
     editBtn.addEventListener("click", enterEditMode);
     addRowBtn.addEventListener("click", () => addEditRow());
     enableTabToAddRow(editRowsContainer, addEditRow);
     saveEditBtn.addEventListener("click", saveEdits);
 
-    // ---- QUIZ STARTEN ----
+
+    // ---------------- QUIZ ----------------
     function startQuiz() {
         const mode = quizModeSelect.value;
-        const direction = quizDirectionSelect.value;  // <-- werkt nu perfect met jouw HTML
+        const direction = quizDirectionSelect.value;
 
         goTo("p6_quiz", {
             folder: currentFolderIndex,
@@ -389,7 +385,134 @@ function initListPage() {
     }
 
     startQuizBtn.addEventListener("click", startQuiz);
+
+    // ---------------- VERWIJDER LIJST ----------------
+    const deleteBtn = document.getElementById("deleteListBtn");
+    deleteBtn.onclick = function () {
+
+        const confirmDelete = confirm("Weet je zeker dat je deze lijst wilt verwijderen?");
+
+        if (!confirmDelete) return;
+
+        const folder = appData.folders[currentFolderIndex];
+
+        // Lijst verwijderen
+        folder.lists.splice(currentListIndex, 1);
+
+        saveData();
+
+        alert("Lijst verwijderd!");
+
+        // Terug naar de folderpagina
+        goTo("p3_folder", { folder: currentFolderIndex });
+    };
+
+
+    // ---------------- EXPORT FUNCTIE ----------------
+    const exportBtn = document.getElementById("exportListBtn");
+    exportBtn.onclick = function () {
+
+        const folder = appData.folders[currentFolderIndex];
+        const list = folder.lists[currentListIndex];
+
+        const json = JSON.stringify(list, null, 2);
+        const blob = new Blob([json], { type: "application/json" });
+        const url = URL.createObjectURL(blob);
+
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = `${list.name}.json`;
+        link.click();
+
+        URL.revokeObjectURL(url);
+    };
+
+
+    // ---------------- IMPORT FUNCTIE ----------------
+    const importBtn = document.getElementById("importListBtn");
+    const importInput = document.getElementById("importListInput");
+
+    importBtn.onclick = () => importInput.click();
+
+    importInput.onchange = function (event) {
+        const file = event.target.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+
+        reader.onload = function (e) {
+            try {
+                const importedList = JSON.parse(e.target.result);
+
+                if (!importedList.words || !Array.isArray(importedList.words)) {
+                    alert("Dit is geen geldige woordenlijst.");
+                    return;
+                }
+
+                folder.lists.push(importedList);
+                saveData();
+
+                alert("Lijst succesvol geïmporteerd!");
+                goTo("p3_folder", { folder: currentFolderIndex });
+
+            } catch (err) {
+                alert("Importeren mislukt (ongeldige JSON)");
+            }
+        };
+
+        reader.readAsText(file);
+    };
+
+    // ---------------- IMPORT IN NIEUWE LIJST ----------------
+    const importIntoNewBtn = document.getElementById("importIntoNewBtn");
+    const importIntoNewInput = document.getElementById("importIntoNewInput");
+
+    importIntoNewBtn.onclick = () => importIntoNewInput.click();
+
+    importIntoNewInput.onchange = function (event) {
+        const file = event.target.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+
+        reader.onload = function (e) {
+            try {
+                const importedList = JSON.parse(e.target.result);
+
+                if (!importedList.words || !Array.isArray(importedList.words)) {
+                    alert("Dit is geen geldige woordenlijst.");
+                    return;
+                }
+
+                // Vul de form automatisch in
+                document.getElementById("newListName").value = importedList.name || "";
+                document.getElementById("newListFromLang").value = importedList.fromLang || "";
+                document.getElementById("newListToLang").value = importedList.toLang || "";
+
+                const container = document.getElementById("newListWords");
+                container.innerHTML = "";
+
+                importedList.words.forEach(w => {
+                    container.innerHTML += `
+                        <div class="word-row">
+                            <input type="text" value="${w.front}">
+                            <input type="text" value="${w.back}">
+                        </div>
+                    `;
+                });
+
+                alert("Lijst geïmporteerd en klaar om op te slaan!");
+
+            } catch (err) {
+                alert("Importeren mislukt (ongeldige JSON)");
+            }
+        };
+
+        reader.readAsText(file);
+    };
 }
+
+
 // ------- NIEUWE LIJST PAGINA (p5) -------
 
 function initNewListPage() {

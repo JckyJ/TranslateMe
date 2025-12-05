@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Lijst - WRTS</title>
+    <title>Lijst – TranslateMe</title>
     <link rel="stylesheet" href="style.css">
     <script src="app.js" defer></script>
 </head>
@@ -31,7 +31,8 @@
     <h3>Woorden in deze lijst</h3>
     <div id="wordsView"></div>
 
-    <button type="button" id="editListBtn">Bewerken</button>
+    <button type="button" id="editListBtn" class="action-btn purple">Bewerken</button>
+    <button type="button" id="deleteListBtn" class="action-btn red">Verwijder lijst</button>
 </div>
 
 
@@ -60,25 +61,24 @@
     <!-- Richting van overhoren -->
     <label for="quizDirection">Richting</label>
     <select id="quizDirection">
-        <!-- <option value="forward">NL → EN</option>
-        <option value="reverse">EN → NL</option>
-        <option value="both">Beide kanten</option> -->
+        <!-- Wordt volledig dynamisch gevuld in app.js -->
     </select>
 
     <button type="button" id="startQuizBtn">Start overhoring</button>
+</div>
 
 
-    <!-- Dit blok wordt NIET meer gebruikt als de quiz een aparte pagina heeft,
-         maar ik laat het staan zodat niets stukgaat -->
-    <div id="quizBlock" style="display:none; margin-top:10px;">
-        <p id="question"></p>
+<!-- 🔵 EXPORT / IMPORT -->
+<div class="card">
+    <h2>Importeren / Exporteren</h2>
 
-        <input type="text" id="answerInput">
-        <div id="multipleChoices" style="margin-top:8px;"></div>
+    <div class="import-export-row">
+        <!-- EXPORT -->
+        <button id="exportListBtn" class="purple-btn">Exporteer lijst</button>
 
-        <button type="button" id="checkAnswerBtn">Controleer</button>
-
-        <p id="feedback"></p>
+        <!-- IMPORT -->
+        <input type="file" id="importListInput" accept=".json" style="display:none;">
+        <button id="importListBtn" class="purple-btn">Importeer lijst</button>
     </div>
 </div>
 
