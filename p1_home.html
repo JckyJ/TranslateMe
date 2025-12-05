@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Home - WRTS</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="app.js" defer></script>
+</head>
+<body data-page="home">
+
+<div class="navbar">
+    <span class="navlink" onclick="goTo('p1_home')">Home</span>
+
+    <div class="dropdown">
+        <span class="navlink dropdown-toggle">Mapjes ▾</span>
+        <div class="dropdown-content" id="navFoldersDropdown"></div>
+    </div>
+
+    <span class="navlink" onclick="goTo('p2_folders')">Mapjes-overzicht</span>
+    <span class="navlink" onclick="goTo('p5_new_list')">Nieuw</span>
+</div>
+
+<div class="card">
+    <h1>Profiel</h1>
+    <p><strong>Naam:</strong> <span id="profileName"></span></p>
+    <p><strong>Aantal talen/mapjes:</strong> <span id="statsLanguages"></span></p>
+    <p><strong>Aantal lijsten:</strong> <span id="statsLists"></span></p>
+</div>
+
+<div class="card">
+    <h2>Talen / mapjes</h2>
+    <ul id="languageList"></ul>
+</div>
+
+</body>
+</html>

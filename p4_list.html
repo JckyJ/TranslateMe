@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Lijst - WRTS</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="app.js" defer></script>
+</head>
+
+<body data-page="list">
+
+<!-- 🔵 NAVIGATIEBALK -->
+<div class="navbar">
+    <span class="navlink" onclick="goTo('p1_home')">Home</span>
+
+    <div class="dropdown">
+        <span class="navlink dropdown-toggle">Mapjes ▾</span>
+        <div class="dropdown-content" id="navFoldersDropdown"></div>
+    </div>
+
+    <span class="navlink" onclick="goTo('p2_folders')">Mapjes</span>
+    <span class="navlink" onclick="goTo('p5_new_list')">Nieuw</span>
+</div>
+
+
+<!-- 🔵 TITEL + INFO -->
+<div class="card">
+    <h1 id="listTitle"></h1>
+    <p id="listInfo"></p>
+
+    <h3>Woorden in deze lijst</h3>
+    <div id="wordsView"></div>
+
+    <button type="button" id="editListBtn">Bewerken</button>
+</div>
+
+
+<!-- 🔵 LIJST BEWERKEN -->
+<div class="card" id="editSection">
+    <h2>Lijst bewerken</h2>
+
+    <div id="editRows"></div>
+
+    <button type="button" id="addWordRowBtn">Nieuw woord</button>
+    <button type="button" id="saveEditBtn">Wijzigingen opslaan</button>
+</div>
+
+
+<!-- 🔵 OVERHORING -->
+<div class="card">
+    <h2>Overhoren</h2>
+
+    <!-- Manier van overhoren -->
+    <label for="quizMode">Manier van overhoren</label>
+    <select id="quizMode">
+        <option value="type">Juiste antwoord intypen</option>
+        <option value="mc">Meerkeuze (4 opties)</option>
+    </select>
+
+    <!-- Richting van overhoren -->
+    <label for="quizDirection">Richting</label>
+    <select id="quizDirection">
+        <!-- <option value="forward">NL → EN</option>
+        <option value="reverse">EN → NL</option>
+        <option value="both">Beide kanten</option> -->
+    </select>
+
+    <button type="button" id="startQuizBtn">Start overhoring</button>
+
+
+    <!-- Dit blok wordt NIET meer gebruikt als de quiz een aparte pagina heeft,
+         maar ik laat het staan zodat niets stukgaat -->
+    <div id="quizBlock" style="display:none; margin-top:10px;">
+        <p id="question"></p>
+
+        <input type="text" id="answerInput">
+        <div id="multipleChoices" style="margin-top:8px;"></div>
+
+        <button type="button" id="checkAnswerBtn">Controleer</button>
+
+        <p id="feedback"></p>
+    </div>
+</div>
+
+</body>
+</html>

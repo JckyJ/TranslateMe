@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Nieuwe lijst - WRTS</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="app.js" defer></script>
+</head>
+<body data-page="new-list">
+
+<div class="navbar">
+    <span class="navlink" onclick="goTo('p1_home')">Home</span>
+
+    <div class="dropdown">
+        <span class="navlink dropdown-toggle">Mapjes ▾</span>
+        <div class="dropdown-content" id="navFoldersDropdown"></div>
+    </div>
+
+    <span class="navlink" onclick="goTo('p2_folders')">Mapjes</span>
+    <span class="navlink" onclick="goTo('p5_new_list')">Nieuw</span>
+</div>
+
+<div class="card">
+    <h1>Nieuwe lijst</h1>
+
+    <form id="newListForm">
+        <label for="listName">Naam van de lijst</label>
+        <input type="text" id="listName" required>
+
+        <label for="folderSelect">Mapje / taal</label>
+        <select id="folderSelect" required></select>
+
+        <label for="fromLang">Taal A (bijv. Nederlands)</label>
+        <input type="text" id="fromLang" required>
+
+        <label for="toLang">Taal B (bijv. Engels)</label>
+        <input type="text" id="toLang" required>
+
+        <h3>Woorden toevoegen</h3>
+        <p>Gebruik TAB om naar het volgende veld te gaan. ENTER slaat de lijst op.</p>
+
+        <div id="newListRows"></div>
+
+        <button type="button" id="addWordRowBtn_new">Nieuw woord</button>
+        <br>
+        <button type="submit">Lijst opslaan</button>
+    </form>
+</div>
+
+</body>
+</html>

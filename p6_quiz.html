@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Overhoring - WRTS</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="app.js" defer></script>
+</head>
+<body data-page="quiz">
+
+<div class="navbar">
+    <span class="navlink" onclick="goTo('p1_home')">Home</span>
+
+    <div class="dropdown">
+        <span class="navlink dropdown-toggle">Mapjes ▾</span>
+        <div class="dropdown-content" id="navFoldersDropdown"></div>
+    </div>
+
+    <span class="navlink" onclick="goTo('p2_folders')">Mapjes</span>
+    <span class="navlink" onclick="goTo('p5_new_list')">Nieuw</span>
+</div>
+
+<div class="card">
+    <h1>Overhoring</h1>
+
+    <p id="quizInfo"></p>
+
+    <div id="progressWrapper" style="margin-bottom: 10px;">
+        <div id="progressText"></div>
+        <div style="height: 10px; background-color: #ddd; border-radius: 5px;">
+            <div id="progressBar" style="height: 10px; width: 0%; background-color: #00c911; border-radius: 5px;"></div>
+        </div>
+    </div>
+
+    <div id="quizQuestionBlock">
+        <p id="question" style="font-size: 1.2em; font-weight: bold;"></p>
+
+        <input type="text" id="answerInput" autocomplete="off">
+        <div id="multipleChoices"></div>
+
+        <button id="submitBtn">Controleer</button>
+        <p id="feedback"></p>
+        <button id="nextBtn" style="display:none;">Volgende vraag</button>
+
+        <button onclick="goTo('p4_list', {folder: window.folderIndex, list: window.listIndex})" 
+                class="secondary" style="margin-top:15px;">
+            Stop overhoring
+        </button>
+    </div>
+</div>
+
+</body>
+</html>
