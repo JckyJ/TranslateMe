@@ -463,53 +463,7 @@ function initListPage() {
         reader.readAsText(file);
     };
 
-    // ---------------- IMPORT IN NIEUWE LIJST ----------------
-    const importIntoNewBtn = document.getElementById("importIntoNewBtn");
-    const importIntoNewInput = document.getElementById("importIntoNewInput");
 
-    importIntoNewBtn.onclick = () => importIntoNewInput.click();
-
-    importIntoNewInput.onchange = function (event) {
-        const file = event.target.files[0];
-        if (!file) return;
-
-        const reader = new FileReader();
-
-        reader.onload = function (e) {
-            try {
-                const importedList = JSON.parse(e.target.result);
-
-                if (!importedList.words || !Array.isArray(importedList.words)) {
-                    alert("Dit is geen geldige woordenlijst.");
-                    return;
-                }
-
-                // Vul de form automatisch in
-                document.getElementById("newListName").value = importedList.name || "";
-                document.getElementById("newListFromLang").value = importedList.fromLang || "";
-                document.getElementById("newListToLang").value = importedList.toLang || "";
-
-                const container = document.getElementById("newListWords");
-                container.innerHTML = "";
-
-                importedList.words.forEach(w => {
-                    container.innerHTML += `
-                        <div class="word-row">
-                            <input type="text" value="${w.front}">
-                            <input type="text" value="${w.back}">
-                        </div>
-                    `;
-                });
-
-                alert("Lijst geïmporteerd en klaar om op te slaan!");
-
-            } catch (err) {
-                alert("Importeren mislukt (ongeldige JSON)");
-            }
-        };
-
-        reader.readAsText(file);
-    };
 }
 
 
@@ -630,6 +584,54 @@ function initNewListPage() {
 
     populateFolderDropdown();
     addWordRow(); // alvast één rij
+
+        // ---------------- IMPORT IN NIEUWE LIJST ----------------
+        const importIntoNewBtn = document.getElementById("importIntoNewBtn");
+        const importIntoNewInput = document.getElementById("importIntoNewInput");
+
+        importIntoNewBtn.onclick = () => importIntoNewInput.click();
+
+        importIntoNewInput.onchange = function (event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+
+            reader.onload = function (e) {
+                try {
+                    const importedList = JSON.parse(e.target.result);
+
+                    if (!importedList.words || !Array.isArray(importedList.words)) {
+                        alert("Dit is geen geldige woordenlijst.");
+                        return;
+                    }
+
+                    // Vul de form automatisch in
+                    document.getElementById("newListName").value = importedList.name || "";
+                    document.getElementById("newListFromLang").value = importedList.fromLang || "";
+                    document.getElementById("newListToLang").value = importedList.toLang || "";
+
+                    const container = document.getElementById("newListWords");
+                    container.innerHTML = "";
+
+                    importedList.words.forEach(w => {
+                        container.innerHTML += `
+                            <div class="word-row">
+                                <input type="text" value="${w.front}">
+                                <input type="text" value="${w.back}">
+                            </div>
+                        `;
+                    });
+
+                    alert("Lijst geïmporteerd en klaar om op te slaan!");
+
+                } catch (err) {
+                    alert("Importeren mislukt (ongeldige JSON)");
+                }
+            };
+
+            reader.readAsText(file);
+        };
 }
 
 function initQuizPage() {
