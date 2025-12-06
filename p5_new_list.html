@@ -27,28 +27,41 @@
     <button type="button" id="importIntoNewBtn" class="purple-btn">Importeer lijst</button>
     <input type="file" id="importIntoNewInput" accept=".json" style="display:none;">
 
-    <form id="newListForm">
-        <label for="listName">Naam van de lijst</label>
-        <input type="text" id="listName" required>
+<form id="newListForm">
 
-        <label for="folderSelect">Mapje / taal</label>
-        <select id="folderSelect" required></select>
+    <!-- NAAM VAN DE LIJST -->
+    <label for="listName">Naam van de lijst</label>
+    <input type="text" id="listName" required>
 
-        <label for="fromLang">Taal A (bijv. Nederlands)</label>
-        <input type="text" id="fromLang" required>
+    <!-- MAPJE -->
+    <label for="folderSelect">Mapje / taal</label>
+    <select id="folderSelect" required></select>
 
-        <label for="toLang">Taal B (bijv. Engels)</label>
-        <input type="text" id="toLang" required>
+    <!-- TALEN -->
+    <div class="lang-row">
+        <div class="lang-col">
+            <label for="fromLang">Taal A (bijv. Nederlands)</label>
+            <input type="text" id="fromLang" required>
+        </div>
 
-        <h3>Woorden toevoegen</h3>
-        <p>Gebruik TAB om naar het volgende veld te gaan. ENTER slaat de lijst op.</p>
+        <div class="lang-col">
+            <label for="toLang">Taal B (bijv. Engels)</label>
+            <input type="text" id="toLang" required>
+        </div>
+    </div>
 
-        <div id="newListRows"></div>
+    <h3>Woorden toevoegen</h3>
+    <p>Gebruik TAB om naar het volgende veld te gaan. ENTER slaat de lijst op.</p>
 
-        <button type="button" id="addWordRowBtn_new">Nieuw woord</button>
-        <br>
-        <button type="submit">Lijst opslaan</button>
-    </form>
+    <div id="newListRows"></div>
+
+    <!-- ACTIE KNOPPEN -->
+    <div class="action-row">
+        <button type="button" id="addWordRowBtn_new" class="purple-btn">Nieuw woord</button>
+        <button type="submit" class="purple-btn">Lijst opslaan</button>
+    </div>
+
+</form>
 </div>
 
 </body>
