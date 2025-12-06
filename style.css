@@ -1,3 +1,6 @@
+/* =========================================
+   GLOBAL RESET & BASE STYLES
+   ========================================= */
 * {
     box-sizing: border-box;
 }
@@ -7,10 +10,12 @@ body {
     margin: 0;
     padding: 80px 20px 20px; /* ruimte boven voor navbar */
     background-color: #f3e2f1;
+    color: #333;
 }
 
-/* NAVBAR */
-
+/* =========================================
+   NAVBAR
+   ========================================= */
 .navbar {
     position: fixed;
     top: 0;
@@ -26,22 +31,26 @@ body {
 }
 
 .navlink {
-    text-decoration: underline;
-    cursor: pointer;
     color: #7900c9;
+    cursor: pointer;
     font-size: 16px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: 0.2s ease;
 }
 
-/* Dropdown voor mapjes */
+.navlink:hover {
+    text-decoration: underline;
+}
 
+/* =========================================
+   DROPDOWN
+   ========================================= */
 .dropdown {
     position: relative;
     display: inline-block;
 }
-
-.dropdown-toggle {
-    display: inline-block;
-}
+.dropdown-toggle { cursor: pointer; }
 
 .dropdown-content {
     display: none;
@@ -51,144 +60,197 @@ body {
     background-color: #ffffff;
     min-width: 160px;
     border: 1px solid #ccc;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    padding: 5px 0;
-    z-index: 1001;
+    border-radius: 6px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+    padding: 6px 0;
 }
-
 .dropdown:hover .dropdown-content {
     display: block;
 }
 
 .dropdown-item {
-    padding: 6px 12px;
+    padding: 8px 14px;
     cursor: pointer;
-    white-space: nowrap;
+    transition: 0.15s;
+    color: #333;
 }
-
 .dropdown-item:hover {
-    background-color: #f0f0f0;
-}
-
-/* Algemeen layout */
-
-h1, h2, h3 {
-    margin-top: 0;
-}
-
-.card {
-    background-color: #ffffff;
-    padding: 15px;
-    margin-bottom: 15px;
-    border-radius: 8px;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
-}
-
-label {
-    display: block;
-    margin-top: 8px;
-    margin-bottom: 4px;
-}
-
-input, select, button, textarea {
-    font-family: inherit;
-    font-size: 14px;
-}
-
-input[type="text"], select {
-    padding: 6px 8px;
-    width: 100%;
-    max-width: 300px;
-    border-radius: 4px;
-    border: 1px solid #ccc;
-}
-
-button {
-    padding: 6px 14px;
-    border-radius: 4px;
-    border: 1px solid #7900c9;
-    background-color: #7900c9;
-    color: white;
-    cursor: pointer;
-    margin-top: 8px;
-}
-
-button.secondary {
-    background-color: #ffffff;
+    background-color: #f5f0ff;
     color: #7900c9;
 }
 
+/* =========================================
+   TITELS
+   ========================================= */
+h1, h2, h3 {
+    margin-top: 0;
+    color: #7900c9;
+    font-weight: 700;
+}
+h1 { font-size: 26px; }
+h2 { font-size: 22px; margin-bottom: 6px; }
+h3 { font-size: 18px; }
+
+/* =========================================
+   CARDS
+   ========================================= */
+.card {
+    background-color: #ffffff;
+    padding: 18px;
+    margin-bottom: 16px;
+    border-radius: 12px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.12);
+}
+
+/* =========================================
+   INPUTS & SELECTS (MODERN LOOK)
+   ========================================= */
+input[type="text"],
+select {
+    padding: 10px 12px;
+    width: 100%;
+    max-width: 320px;
+    border-radius: 8px;
+    border: 1.4px solid #ccc;
+    transition: 0.2s ease;
+    font-size: 15px;
+    background: #fff;
+}
+
+input[type="text"]:focus,
+select:focus {
+    border-color: #7900c9;
+    box-shadow: 0 0 6px rgba(121,0,201,0.25);
+    outline: none;
+}
+
+/* =========================================
+   BUTTONS (MODERNIZED)
+   ========================================= */
+button {
+    padding: 10px 18px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: 600;
+    transition: 0.2s ease;
+}
+
+/* PAARS */
+.purple-btn,
+.action-btn.purple {
+    background-color: #7900c9;
+    color: white;
+}
+
+.purple-btn:hover,
+.action-btn.purple:hover {
+    background-color: #8f21db;
+    transform: translateY(-1px);
+}
+
+/* ROOD */
+.delete-btn,
+.danger-btn,
+.action-btn.red,
 button.danger {
-    border-color: #c90000;
-    background-color: #c90000;
-    color: #ffffff;
+    background-color: #e63946;
+    color: white;
 }
 
+.delete-btn:hover,
+.danger-btn:hover,
+.action-btn.red:hover,
+button.danger:hover {
+    background-color: #fc7580;
+    transform: translateY(-1px);
+}
+
+/* DISABLED */
 button:disabled {
-    opacity: 0.6;
+    opacity: 0.5;
     cursor: default;
+    transform: none;
 }
 
-/* Lijsten */
-
-ul {
-    padding-left: 20px;
-}
-
+/* =========================================
+   WORD ROWS (LIST EDITOR)
+   ========================================= */
 .word-row {
     display: flex;
-    gap: 8px;
-    margin-bottom: 6px;
+    gap: 10px;
+    margin-bottom: 8px;
     align-items: center;
 }
-
 .word-row input[type="text"] {
-    max-width: 200px;
+    max-width: 240px;
 }
 
-.word-row button {
-    margin-top: 0;
+/* =========================================
+   FOLDER LIST (P2)
+   ========================================= */
+.folder-row {
+    padding: 14px;
+    margin-bottom: 10px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+    cursor: pointer;
+    transition: 0.2s ease;
 }
 
-/* === Multiple Choice container: ruimte tussen opties === */
+.folder-row:hover {
+    background-color: #f7e9ff;
+}
+
+.folder-name {
+    font-size: 1.25rem;
+    font-weight: bold;
+    color: #7900c9;
+}
+
+/* =========================================
+   MULTIPLE CHOICE STYLING
+   ========================================= */
 #multipleChoices {
     display: flex;
     flex-wrap: wrap;
-    gap: 10px;              /* ruimte tussen knoppen */
-    margin-bottom: 15px;
+    gap: 14px;
+    margin: 12px 0 20px;
 }
 
-/* === Standaard MC-knop === */
 .mc-option {
-    background-color: #f57ff5;    /* Paars: zorg dat ze allemaal dezelfde kleur hebben */
+    background-color: #f57ff5;
     color: white;
     border: none;
-    padding: 10px 16px;
-    border-radius: 8px;
+    padding: 12px 18px;
+    border-radius: 10px;
     cursor: pointer;
     font-size: 15px;
-    transition: all 0.2s ease;
+    transition: 0.15s;
+    min-width: 120px;
+
+    /* spacing tussen knoppen */
+    margin: 6px;
 }
 
-/* Hoverstijl */
 .mc-option:hover {
-    background-color: #f57ff5;
+    background-color: #dd41dd;
 }
 
-/* === GOED ANTWOORD === */
+/* goede antwoord */
 .mc-correct {
-    background-color: #48e24d !important; /* groen */
-    color: white !important;
+    background-color: #48e24d !important;
 }
 
-/* === FOUT ANTWOORD === */
+/* fout antwoord */
 .mc-wrong {
-    background-color: #e42031 !important; /* rood */
-    color: white !important;
+    background-color: #e63946 !important;
     animation: shake 0.3s ease;
 }
 
-/* === Shake animatie bij fout === */
+/* shake animatie */
 @keyframes shake {
     0% { transform: translateX(0); }
     25% { transform: translateX(-5px); }
@@ -197,87 +259,7 @@ ul {
     100% { transform: translateX(0); }
 }
 
-/* Force spacing between MC buttons */
-#multipleChoices {
-    display: flex !important;
-    flex-wrap: wrap !important;
-    gap: 12px !important;      /* <-- spacing between buttons */
-    row-gap: 12px !important;  /* extra spacing vertically */
-    column-gap: 12px !important; /* extra spacing horizontally */
-    margin-bottom: 15px !important;
-}
-
-/* To ensure each button keeps its own space */
-.mc-option {
-    display: inline-flex !important;
-    justify-content: center;
-    align-items: center;
-    min-width: 100px;            /* forces wider buttons so they separate better */
-}
-
-/* ---------- IMPORT / EXPORT BUTTONS ---------- */
-
-.import-export-row {
-    display: flex;
-    gap: 12px;
-    margin-top: 10px;
-    flex-wrap: wrap; /* zorgt dat ze mooi afbreken op kleine schermen */
-}
-
-.purple-btn {
-    background-color: #8b00c9;
-    color: white;
-    border: none;
-    padding: 10px 16px;
-    border-radius: 6px;
-    font-size: 15px;
-    cursor: pointer;
-    transition: 0.2s ease;
-}
-
-.purple-btn:hover {
-    background-color: #a83de0;
-}
-
-.purple-btn:active {
-    transform: scale(0.96);
-}
-
-.danger-btn {
-    background-color: #d62828;
-    color: white;
-    border: none;
-    padding: 10px 16px;
-    border-radius: 6px;
-    cursor: pointer;
-}
-.danger-btn:hover {
-    background-color: #e63946;
-}
-
-.action-btn {
-    display: inline-block;
-    min-width: 150px;     /* zelfde breedte */
-    padding: 10px 16px;
-    text-align: center;
-    border-radius: 6px;
-    color: white;
-    border: none;
-    cursor: pointer;
-    font-size: 16px;
-    font-weight: 500;
-}
-
-.action-btn.purple {
-    background-color: #8000d7;
-}
-.action-btn.purple:hover {
-    background-color: #9b28ff;
-}
-
-.action-btn.red {
-    background-color: #d62828;
-}
-.action-btn.red:hover {
-    background-color: #e63946;
-}
+/* =========================================
+   MISC
+   ========================================= */
+ul { padding-left: 20px; }

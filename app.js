@@ -139,7 +139,6 @@ function initHomePage() {
 }
 
 // ------- MAPJES OVERZICHT (p2) -------
-
 function initFoldersPage() {
     const folderListEl = document.getElementById("folderList");
     const newFolderInput = document.getElementById("newFolderName");
@@ -147,28 +146,24 @@ function initFoldersPage() {
 
     function renderFolders() {
         folderListEl.innerHTML = "";
+
         if (appData.folders.length === 0) {
-            folderListEl.textContent = "Je hebt nog geen mapjes.";
+            folderListEl.innerHTML = "<p>Geen mapjes gevonden.</p>";
             return;
         }
+
         appData.folders.forEach((folder, index) => {
-            const card = document.createElement("div");
-            card.className = "card";
+            const div = document.createElement("div");
+            div.className = "folder-row";
 
-            const title = document.createElement("h3");
-            title.textContent = folder.name;
-            card.appendChild(title);
+            div.innerHTML = `
+                <span class="folder-name clickable"
+                      onclick="goTo('p3_folder', { folder: ${index} })">
+                    ${folder.name}
+                </span>
+            `;
 
-            const info = document.createElement("p");
-            info.textContent = `Aantal lijsten: ${folder.lists.length}`;
-            card.appendChild(info);
-
-            const openBtn = document.createElement("button");
-            openBtn.textContent = "Bekijk lijsten";
-            openBtn.onclick = () => goTo("p3_folder", { folder: index });
-            card.appendChild(openBtn);
-
-            folderListEl.appendChild(card);
+            folderListEl.appendChild(div);
         });
     }
 
@@ -178,66 +173,64 @@ function initFoldersPage() {
             alert("Geef een naam aan het mapje.");
             return;
         }
+
         appData.folders.push({ name, lists: [] });
         saveData();
+
         newFolderInput.value = "";
         renderFolders();
-        initNavbar(); // dropdown vernieuwen
+        initNavbar();
     });
 
     renderFolders();
 }
 
 // ------- MAPJE → LIJSTEN (p3) -------
-
 function initFolderPage() {
     const params = new URLSearchParams(window.location.search);
     const folderIndex = parseInt(params.get("folder"), 10);
 
-    if (isNaN(folderIndex) || folderIndex < 0 || folderIndex >= appData.folders.length) {
-        alert("Ongeldig mapje.");
-        goTo("p2_folders");
-        return;
-    }
-
     const folder = appData.folders[folderIndex];
-
-    const folderTitleEl = document.getElementById("folderTitle");
-    const listContainerEl = document.getElementById("listsInFolder");
+    const folderTitle = document.getElementById("folderTitle");
+    const listsContainer = document.getElementById("listsInFolder");
     const newListBtn = document.getElementById("newListInFolderBtn");
 
-    folderTitleEl.textContent = folder.name;
+    folderTitle.textContent = folder.name;
 
     function renderLists() {
-        listContainerEl.innerHTML = "";
+        listsContainer.innerHTML = "";
+
         if (folder.lists.length === 0) {
-            listContainerEl.textContent = "Nog geen lijsten in dit mapje.";
+            listsContainer.innerHTML = "<p>Geen lijsten in dit mapje.</p>";
             return;
         }
-        folder.lists.forEach((list, listIndex) => {
+
+        folder.lists.forEach((list, index) => {
             const card = document.createElement("div");
             card.className = "card";
 
-            const title = document.createElement("h3");
-            title.textContent = list.name;
-            card.appendChild(title);
+            card.innerHTML = `
+                <h3>${list.name}</h3>
+                <p>Talen: ${list.fromLang} → ${list.toLang} (woorden: ${list.words.length})</p>
+                <button onclick="goTo('p4_list', { folder: ${folderIndex}, list: ${index} })" class="purple-btn">Open lijst</button>
+                <button class="delete-btn" id="del_${index}">Verwijder lijst</button>
+            `;
 
-            const info = document.createElement("p");
-            info.textContent = `Talen: ${list.fromLang} → ${list.toLang} (woorden: ${list.words.length})`;
-            card.appendChild(info);
+            listsContainer.appendChild(card);
 
-            const openBtn = document.createElement("button");
-            openBtn.textContent = "Open lijst";
-            openBtn.onclick = () => goTo("p4_list", { folder: folderIndex, list: listIndex });
-            card.appendChild(openBtn);
-
-            listContainerEl.appendChild(card);
+            document.getElementById(`del_${index}`).onclick = () => {
+                if (confirm(`Wil je de lijst "${list.name}" verwijderen?`)) {
+                    folder.lists.splice(index, 1);
+                    saveData();
+                    renderLists();
+                }
+            };
         });
     }
 
-    newListBtn.addEventListener("click", () => {
+    newListBtn.onclick = () => {
         goTo("p5_new_list", { folder: folderIndex });
-    });
+    };
 
     renderLists();
 }
