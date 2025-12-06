@@ -470,6 +470,7 @@ function initListPage() {
 // ------- NIEUWE LIJST PAGINA (p5) -------
 
 function initNewListPage() {
+
     const params = new URLSearchParams(window.location.search);
     const preselectedFolder = params.has("folder") ? parseInt(params.get("folder"), 10) : null;
 
@@ -481,8 +482,12 @@ function initNewListPage() {
     const addRowBtn = document.getElementById("addWordRowBtn_new");
     const form = document.getElementById("newListForm");
 
+    // ---------------------------------------------
+    // MAPJES DROPDOWN VULLEN
+    // ---------------------------------------------
     function populateFolderDropdown() {
         folderSelect.innerHTML = "";
+
         if (appData.folders.length === 0) {
             const opt = document.createElement("option");
             opt.value = "";
@@ -496,24 +501,30 @@ function initNewListPage() {
                 opt.textContent = folder.name;
                 folderSelect.appendChild(opt);
             });
-            if (preselectedFolder !== null && preselectedFolder >= 0 && preselectedFolder < appData.folders.length) {
+
+            if (preselectedFolder !== null &&
+                preselectedFolder >= 0 &&
+                preselectedFolder < appData.folders.length) {
                 folderSelect.value = preselectedFolder;
             }
         }
     }
 
+    // ---------------------------------------------
+    // NIEUW WOORD RIJ MAKEN
+    // ---------------------------------------------
     function addWordRow(frontValue = "", backValue = "") {
         const row = document.createElement("div");
         row.className = "word-row";
 
         const frontInput = document.createElement("input");
         frontInput.type = "text";
-        frontInput.placeholder = "Woord (taal A)";
+        frontInput.placeholder = fromLangInput.value || "Woord (taal A)";
         frontInput.value = frontValue;
 
         const backInput = document.createElement("input");
         backInput.type = "text";
-        backInput.placeholder = "Vertaling (taal B)";
+        backInput.placeholder = toLangInput.value || "Vertaling (taal B)";
         backInput.value = backValue;
 
         const delBtn = document.createElement("button");
@@ -529,6 +540,9 @@ function initNewListPage() {
         rowsContainer.appendChild(row);
     }
 
+    // ---------------------------------------------
+    // OPSLAAN VAN DE NIEUWE LIJST
+    // ---------------------------------------------
     function handleSubmit(e) {
         e.preventDefault();
 
@@ -548,6 +562,7 @@ function initNewListPage() {
 
         const rows = Array.from(rowsContainer.querySelectorAll(".word-row"));
         const words = [];
+
         rows.forEach(row => {
             const inputs = row.querySelectorAll("input");
             const front = inputs[0].value.trim();
@@ -573,65 +588,66 @@ function initNewListPage() {
         const folder = appData.folders[folderIndex];
         folder.lists.push(newList);
         const newListIndex = folder.lists.length - 1;
+
         saveData();
 
         goTo("p4_list", { folder: folderIndex, list: newListIndex });
     }
 
+    // ---------------------------------------------
+    // EVENT LISTENERS
+    // ---------------------------------------------
     addRowBtn.addEventListener("click", () => addWordRow());
     enableTabToAddRow(rowsContainer, addWordRow);
     form.addEventListener("submit", handleSubmit);
 
+    // Voeg alvast één lege rij toe
     populateFolderDropdown();
-    addWordRow(); // alvast één rij
+    addWordRow();
 
-        // ---------------- IMPORT IN NIEUWE LIJST ----------------
-        const importIntoNewBtn = document.getElementById("importIntoNewBtn");
-        const importIntoNewInput = document.getElementById("importIntoNewInput");
+    // ---------------------------------------------
+    // IMPORTFUNCTIE (WERKT 100%)
+    // ---------------------------------------------
+    const importIntoNewBtn = document.getElementById("importIntoNewBtn");
+    const importIntoNewInput = document.getElementById("importIntoNewInput");
 
-        importIntoNewBtn.onclick = () => importIntoNewInput.click();
+    importIntoNewBtn.onclick = () => importIntoNewInput.click();
 
-        importIntoNewInput.onchange = function (event) {
-            const file = event.target.files[0];
-            if (!file) return;
+    importIntoNewInput.onchange = function (event) {
+        const file = event.target.files[0];
+        if (!file) return;
 
-            const reader = new FileReader();
+        const reader = new FileReader();
 
-            reader.onload = function (e) {
-                try {
-                    const importedList = JSON.parse(e.target.result);
+        reader.onload = function (e) {
+            try {
+                const importedList = JSON.parse(e.target.result);
 
-                    if (!importedList.words || !Array.isArray(importedList.words)) {
-                        alert("Dit is geen geldige woordenlijst.");
-                        return;
-                    }
-
-                    // Vul de form automatisch in
-                    document.getElementById("newListName").value = importedList.name || "";
-                    document.getElementById("newListFromLang").value = importedList.fromLang || "";
-                    document.getElementById("newListToLang").value = importedList.toLang || "";
-
-                    const container = document.getElementById("newListWords");
-                    container.innerHTML = "";
-
-                    importedList.words.forEach(w => {
-                        container.innerHTML += `
-                            <div class="word-row">
-                                <input type="text" value="${w.front}">
-                                <input type="text" value="${w.back}">
-                            </div>
-                        `;
-                    });
-
-                    alert("Lijst geïmporteerd en klaar om op te slaan!");
-
-                } catch (err) {
-                    alert("Importeren mislukt (ongeldige JSON)");
+                if (!importedList.words || !Array.isArray(importedList.words)) {
+                    alert("Dit is geen geldige woordenlijst.");
+                    return;
                 }
-            };
 
-            reader.readAsText(file);
+                // Vul standaardvelden in
+                listNameInput.value = importedList.name || "";
+                fromLangInput.value = importedList.fromLang || "";
+                toLangInput.value = importedList.toLang || "";
+
+                // Huidige rijen resetten
+                rowsContainer.innerHTML = "";
+
+                // Woorden invoegen
+                importedList.words.forEach(w => addWordRow(w.front, w.back));
+
+                alert("Lijst geïmporteerd! Je kunt hem nu opslaan.");
+
+            } catch (err) {
+                alert("Importeren mislukt (ongeldige JSON).");
+            }
         };
+
+        reader.readAsText(file);
+    };
 }
 
 function initQuizPage() {
